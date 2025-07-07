@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     DB_USER:str = ''
     DB_PASS:str = ''
     DB_NAME:str = ""
-    TEST_DB_NAME:str
+    TEST_DB_NAME:str = 'test'
 
     JWT_SECRET: str
     JWT_ALGORITM: str
