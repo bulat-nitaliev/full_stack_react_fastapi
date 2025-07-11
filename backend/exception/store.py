@@ -1,5 +1,5 @@
-class UserExistsException(Exception):
-    detail = "the user already exists"
+class TypeExistsException(Exception):
+    detail = "the type already exists"
 
 
 class UserNotFoundException(Exception):

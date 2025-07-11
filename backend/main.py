@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from users import  user_router, auth_router
+from routes import router
 
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 
 origins = [
@@ -12,8 +13,6 @@ origins = [
     "http://localhost:3000",
     "http://localhost:8000",
 ]
-
-
 
 
 app = FastAPI()
@@ -27,5 +26,8 @@ app.add_middleware(
 )
 
 
-app.include_router(user_router)
-app.include_router(auth_router)
+app.include_router(router)
+# app.include_router(auth_router)
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
