@@ -3,6 +3,7 @@ from db.models import Device, DeviceInfo
 from dependency import get_device_service
 from service.device_service import DeviceService
 from schemas.device_schema import DeviceSchema, ListDeviceSchema
+from exception.store import DeviceNotFoundException
 
 
 router = APIRouter(prefix="/device", tags=["device"])
@@ -14,8 +15,8 @@ async def create_device(
     price: float = Form(),
     type_id: int = Form(),
     brand_id: int = Form(),
-    title: str = Form(),
-    description: str = Form(),
+    # title: str = Form(),
+    # description: str = Form(),
     image: UploadFile = File(None),
     devise_service: DeviceService = Depends(get_device_service),
 ) -> DeviceSchema:
@@ -26,8 +27,8 @@ async def create_device(
         type_id=type_id,
         brand_id=brand_id,
         img=image_path,
-        title=title,
-        description=description,
+        # title=title,
+        # description=description,
     )
 
 
@@ -39,4 +40,14 @@ async def get_all(devise_service: DeviceService = Depends(get_device_service),)-
 
 
 @router.get("/{device_id}")
-async def get_device_by_id(device_id: int): ...
+async def get_device_by_id(
+    device_id: int,
+    device_service: DeviceService = Depends(get_device_service)
+    )->DeviceSchema:
+    try:
+        return await device_service.get_device_by_id(device_id=device_id)
+    except DeviceNotFoundException as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=e.detail
+        )
