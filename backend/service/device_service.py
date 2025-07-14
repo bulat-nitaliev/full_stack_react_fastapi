@@ -33,10 +33,13 @@ class DeviceService:
         )
     
 
-    async def get_all(self):
-        res =  await self.device_repo.get_devices()
-        # res = [ListDeviceSchema(**i) for i in res]
-        # print(res)
+    async def get_all(
+            self,
+            brand_id:int=None, 
+            type_id:int=None
+            ):
+        res = await self.get_query(brand_id=brand_id, type_id=type_id)
+       
         return res
 
     async def get_path_img(self, image: UploadFile) -> str:
@@ -66,3 +69,17 @@ class DeviceService:
         raise DeviceNotFoundException
         
             
+
+
+    async def get_query(self,brand_id:int=None, type_id:int=None)->list[DeviceSchema]:
+        if brand_id and type_id:
+            return  await self.device_repo.get_devices_by_brand_type(
+                brand_id=brand_id, 
+                type_id=type_id
+            )
+        elif brand_id and type_id is None:
+            return  await self.device_repo.get_devices_by_brand_id(brand_id=brand_id)
+        elif brand_id is None and type_id:
+            return  await self.device_repo.get_devices_by_type_id(type_id=type_id)
+            
+        return await self.device_repo.get_devices()

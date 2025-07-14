@@ -15,8 +15,6 @@ class DeviceRepository:
         type_id: int,
         brand_id: int,
         img: str,
-        # title: str,
-        # description: str,
     ) -> Device:
         async with self.db_session as session:
             db_device = Device(
@@ -26,15 +24,6 @@ class DeviceRepository:
             await session.commit()
             await session.refresh(db_device)
 
-            # db_info = DeviceInfo(
-            #     title=title, description=description, device_id=db_device.id
-            # )
-            # session.add(db_info)
-
-            # await session.commit()
-            # await session.refresh(db_device)
-
-            
             return db_device
         
     async def get_devices(self):
@@ -43,6 +32,26 @@ class DeviceRepository:
           res = await session.execute(stmt)
           return res.scalars().all()
       
+
+    async def get_devices_by_brand_type(self,brand_id:int, type_id:int)->list[Device]|None:
+        async with self.db_session as session:
+          stmt = select(Device).where(Device.brand_id==brand_id,Device.type_id==type_id,).order_by(desc(Device.id))
+          res = await session.execute(stmt)
+          return res.scalars().all()
+        
+
+    async def get_devices_by_brand_id(self,brand_id:int)->list[Device]|None:
+        async with self.db_session as session:
+          stmt = select(Device).where(Device.brand_id==brand_id).order_by(desc(Device.id))
+          res = await session.execute(stmt)
+          return res.scalars().all()
+        
+
+    async def get_devices_by_type_id(self,type_id:int)->list[Device]|None:
+        async with self.db_session as session:
+          stmt = select(Device).where(Device.type_id==type_id,).order_by(desc(Device.id))
+          res = await session.execute(stmt)
+          return res.scalars().all()
 
 
     async def get_device_by_id(self,device_id:int)->Device:

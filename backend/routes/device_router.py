@@ -32,9 +32,16 @@ async def create_device(
     )
 
 
-@router.get("/", response_model=list[ListDeviceSchema])
-async def get_all(devise_service: DeviceService = Depends(get_device_service),)->list:
-    res = await devise_service.get_all()
+@router.get("", response_model=list[ListDeviceSchema])
+async def get_all(
+    devise_service: DeviceService = Depends(get_device_service),
+    brand_id:int=None, 
+    type_id:int=None
+    )->list:
+    res = await devise_service.get_all(
+        brand_id=brand_id, 
+        type_id=type_id
+        )
     print(res)
     return res
 
