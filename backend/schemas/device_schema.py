@@ -17,6 +17,5 @@ class DeviceSchema(BaseModel):
     
 
 
-class ListDeviceSchema(DeviceSchema):
-    title:str
-    description:str 
+class ListDeviceSchema(DeviceSchema):...
+    # info: list[DeviceInfoCreate]
