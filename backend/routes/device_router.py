@@ -36,11 +36,16 @@ async def create_device(
 async def get_all(
     devise_service: DeviceService = Depends(get_device_service),
     brand_id:int=None, 
-    type_id:int=None
+    type_id:int=None,
+    limit:int=9,
+    page:int=1
     )->list:
+    offset = limit*page-limit
     res = await devise_service.get_all(
         brand_id=brand_id, 
-        type_id=type_id
+        type_id=type_id,
+        limit=limit,
+        offset=offset
         )
     print(res)
     return res

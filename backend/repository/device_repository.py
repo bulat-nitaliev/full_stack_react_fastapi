@@ -26,30 +26,30 @@ class DeviceRepository:
 
             return db_device
         
-    async def get_devices(self):
+    async def get_devices(self,limit:int, offset:int):
       async with self.db_session as session:
-          stmt = select(Device).order_by(desc(Device.id))
+          stmt = select(Device).order_by(desc(Device.id)).limit(limit=limit).offset(offset=offset)
           res = await session.execute(stmt)
           return res.scalars().all()
       
 
-    async def get_devices_by_brand_type(self,brand_id:int, type_id:int)->list[Device]|None:
+    async def get_devices_by_brand_type(self,brand_id:int, type_id:int,limit:int, offset:int)->list[Device]|None:
         async with self.db_session as session:
-          stmt = select(Device).where(Device.brand_id==brand_id,Device.type_id==type_id,).order_by(desc(Device.id))
+          stmt = select(Device).where(Device.brand_id==brand_id,Device.type_id==type_id,).order_by(desc(Device.id)).limit(limit=limit).offset(offset=offset)
           res = await session.execute(stmt)
           return res.scalars().all()
         
 
-    async def get_devices_by_brand_id(self,brand_id:int)->list[Device]|None:
+    async def get_devices_by_brand_id(self,brand_id:int,limit:int, offset:int)->list[Device]|None:
         async with self.db_session as session:
-          stmt = select(Device).where(Device.brand_id==brand_id).order_by(desc(Device.id))
+          stmt = select(Device).where(Device.brand_id==brand_id).order_by(desc(Device.id)).limit(limit=limit).offset(offset=offset)
           res = await session.execute(stmt)
           return res.scalars().all()
         
 
-    async def get_devices_by_type_id(self,type_id:int)->list[Device]|None:
+    async def get_devices_by_type_id(self,type_id:int,limit:int, offset:int)->list[Device]|None:
         async with self.db_session as session:
-          stmt = select(Device).where(Device.type_id==type_id,).order_by(desc(Device.id))
+          stmt = select(Device).where(Device.type_id==type_id,).order_by(desc(Device.id)).limit(limit=limit).offset(offset=offset)
           res = await session.execute(stmt)
           return res.scalars().all()
 

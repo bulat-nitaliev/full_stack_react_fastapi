@@ -35,10 +35,17 @@ class DeviceService:
 
     async def get_all(
             self,
-            brand_id:int=None, 
-            type_id:int=None
+            brand_id:int, 
+            type_id:int,
+            limit:int,
+            offset:int
             ):
-        res = await self.get_query(brand_id=brand_id, type_id=type_id)
+        res = await self.get_query(
+            brand_id=brand_id, 
+            type_id=type_id,
+            limit=limit,
+            offset=offset
+            )
        
         return res
 
@@ -71,15 +78,34 @@ class DeviceService:
             
 
 
-    async def get_query(self,brand_id:int=None, type_id:int=None)->list[DeviceSchema]:
+    async def get_query(
+            self,
+            brand_id:int, 
+            type_id:int, 
+            limit:int,
+            offset:int
+            )->list[DeviceSchema]:
         if brand_id and type_id:
             return  await self.device_repo.get_devices_by_brand_type(
                 brand_id=brand_id, 
-                type_id=type_id
+                type_id=type_id,
+                limit=limit,
+                offset=offset
             )
         elif brand_id and type_id is None:
-            return  await self.device_repo.get_devices_by_brand_id(brand_id=brand_id)
+            return  await self.device_repo.get_devices_by_brand_id(
+                brand_id=brand_id,
+                limit=limit,
+                offset=offset
+            )
         elif brand_id is None and type_id:
-            return  await self.device_repo.get_devices_by_type_id(type_id=type_id)
+            return  await self.device_repo.get_devices_by_type_id(
+                type_id=type_id,
+                limit=limit,
+                offset=offset
+            )
             
-        return await self.device_repo.get_devices()
+        return await self.device_repo.get_devices(
+            limit=limit,
+            offset=offset
+            )
