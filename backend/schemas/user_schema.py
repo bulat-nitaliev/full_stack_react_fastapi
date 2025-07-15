@@ -5,6 +5,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     name: str
     password: str
+    # role:str
 
 
 class UserSchema(BaseModel):

@@ -4,9 +4,9 @@ from settings.config import settings
 
 class DataBaseHelper:
     def __init__(self, db_url: str):
-        self.engine = create_async_engine(url=db_url)
+        self.engine = create_async_engine(url=db_url, echo=True)
         self.session_factory = async_sessionmaker(
-            bind=self.engine
+            bind=self.engine,
         )
 
     async def get_db_session(self):

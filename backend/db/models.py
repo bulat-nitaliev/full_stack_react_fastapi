@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 from typing import Optional
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
-from sqlalchemy.sql import func
+from sqlalchemy import String, ForeignKey
+
+
 
 
 class TypeBrand(Base):
@@ -16,10 +17,12 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
     name: Mapped[Optional[str]] = mapped_column(String(50))
     password: Mapped[str]
+    role: Mapped[str] = mapped_column(default='User', server_default='User')
 
     basket = relationship("Basket", uselist=False, back_populates="user")
     ratings = relationship("Rating", back_populates="user")
 
+    
 
 class Basket(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), unique=True)

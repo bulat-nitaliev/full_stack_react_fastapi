@@ -14,8 +14,7 @@ class DeviceSchema(BaseModel):
     img: str
     type_id: int
     brand_id: int
-    
 
 
-class ListDeviceSchema(DeviceSchema):...
-    # info: list[DeviceInfoCreate]
+class OneDeviceSchema(DeviceSchema):
+    info: list[DeviceInfoCreate]

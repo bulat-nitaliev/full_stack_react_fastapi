@@ -16,7 +16,8 @@ async def create_user(
         return await user_service.create_user(body=body)
     except UserExistsException as e:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=e.detail)
-
+   
+    
 
 @router.get("/", response_model=list[UserSchema])
 async def get_users(
