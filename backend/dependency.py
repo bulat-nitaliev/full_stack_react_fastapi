@@ -5,6 +5,8 @@ from repository.brand_repository import BrandRepository
 from repository.user_repository import UserRepository
 from repository.type_repository import TypeRepository
 from repository.rate_repository import RateRepository
+from repository.basket_repository import BasketRepository
+from service.basket_service import BasketService
 from service.rate_service import RateService
 from service.user_service import UserService
 from service.auth_service import AuthService
@@ -77,6 +79,20 @@ def get_rating_service(
     device_repo: DeviceRepository = Depends(get_device_repository),
 ) -> RateService:
     return RateService(rate_repo=rate_repo, device_repo=device_repo)
+
+
+def get_basket_repository(db_session: AsyncSession = Depends(get_db_session)):
+    return BasketRepository(db_session=db_session)
+
+
+def get_basket_service(
+    basket_repo: BasketRepository = Depends(get_basket_repository),
+    device_repo: DeviceRepository = Depends(get_device_repository),
+) -> RateService:
+    return BasketService(
+        basket_repo=basket_repo,
+        device_repo=device_repo
+        )
 
 
 
