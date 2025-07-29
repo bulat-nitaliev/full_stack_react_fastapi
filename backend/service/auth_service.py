@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from schemas.auth_schema import LoginSchema
 from db.models import User 
 from exception.user import UserNotCorrectPasswordException, UserNotFoundException
+from exception.token import TokenException
 from settings.config import Settings
 from jose import jwt, JWTError
 from datetime import datetime, timedelta, UTC
@@ -17,6 +18,13 @@ class AuthService:
     async def login(self, email: str, password: str) -> LoginSchema:
         user = await self.user_repo.get_user_by_email(email=email)
         self.validate(user=user, password=password)
+        access_token = self.create_access_token(user_id=user.id, email=user.email, role=user.role)
+
+        return LoginSchema(user_id=user.id, access_token=access_token)
+    
+
+    async def check(self, user_id:int) -> LoginSchema:
+        user = await self.user_repo.get_user_by_id(id=user_id)
         access_token = self.create_access_token(user_id=user.id, email=user.email, role=user.role)
 
         return LoginSchema(user_id=user.id, access_token=access_token)
@@ -45,3 +53,28 @@ class AuthService:
             algorithm=self.settings.JWT_ALGORITM,
         )
         return token
+    
+    def get_user_id_from_access_token(self, access_token):
+        try:
+            payload = jwt.decode(
+                token=access_token,
+                key=self.settings.JWT_SECRET,
+                algorithms=[self.settings.JWT_ALGORITM],
+            )
+        except JWTError:
+            raise TokenException
+        print(payload)
+        return payload["user_id"]
+    
+
+    def get_role_from_access_token(self, access_token):
+        try:
+            payload = jwt.decode(
+                token=access_token,
+                key=self.settings.JWT_SECRET,
+                algorithms=[self.settings.JWT_ALGORITM],
+            )
+        except JWTError:
+            raise TokenException
+        print(payload)
+        return payload["role"]

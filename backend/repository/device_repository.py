@@ -94,4 +94,14 @@ class DeviceRepository:
             )
             res = await session.execute(stmt)
             return res.scalar_one_or_none()
+        
+
+    async def get_device_by_device_id(self, device_id: int) -> Device:
+        async with self.db_session as session:
+            stmt = (
+                select(Device)
+                .where(Device.id == device_id)
+            )
+            res = await session.execute(stmt)
+            return res.scalar_one_or_none()
 

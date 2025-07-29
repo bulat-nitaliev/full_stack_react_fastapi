@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status, Form
-from db.models import Device, DeviceInfo
-from dependency import get_device_service
+from typing import Annotated
+from dependency import get_device_service, get_request_user_id
 from service.device_service import DeviceService
 from schemas.device_schema import DeviceSchema, OneDeviceSchema
 from exception.store import DeviceNotFoundException

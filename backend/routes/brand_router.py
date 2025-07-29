@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from dependency import get_brand_service
 from service.brand_service import BrandService
 from schemas.type_schema import CreateTypeBrandSchema, TypeBrandSchema
+from typing import Annotated
 
 router = APIRouter(prefix="/brand", tags=["brand"])
 
